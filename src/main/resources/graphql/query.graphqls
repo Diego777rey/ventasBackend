@@ -11,9 +11,8 @@ type Query {
     findAllUsuarios: [Usuario]
     findProductoById(productoId: ID!): Producto
     findAllProductos: [Producto]
-    findVentaById(VentaId: ID!): Venta
-    findAllVentas: [Venta]
-    findOneVenta(id: ID!): Venta
+    ventas: [Venta!]!
+    venta(id: ID!): Venta
 }
 type Subscription {
     findAllVendedoresFlux: [Vendedor]

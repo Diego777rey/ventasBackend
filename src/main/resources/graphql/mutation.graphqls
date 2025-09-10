@@ -25,11 +25,7 @@ type Mutation {
     updateProducto(id: ID!, inputProducto: InputProducto!): Producto
     deleteProducto(id: ID!): Producto
 
-    createVenta(inputVenta: InputVenta!): Venta
-    updateVenta(id: ID!, inputVenta: InputVenta!): Venta
-    deleteVenta(id: ID!): Venta
-
-    deleteVentaById(VentaId: ID!): String
-    saveVenta(dto: InputVenta!): Venta
-    updateVentaWithId(id: ID!, dto: InputVenta!): Venta
+    crearVenta(input: VentaInput!): Venta!
+    actualizarVenta(id: ID!, input: VentaInput!): Venta!
+    eliminarVenta(id: ID!): Boolean!
 }

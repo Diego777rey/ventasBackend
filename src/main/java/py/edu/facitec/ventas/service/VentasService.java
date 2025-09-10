@@ -7,18 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import py.edu.facitec.ventas.dto.InputVenta;
 import py.edu.facitec.ventas.dto.InputVentaDetalle;
 import py.edu.facitec.ventas.entity.*;
-import py.edu.facitec.ventas.repository.ClienteRepository;
-import py.edu.facitec.ventas.repository.ProductoRepository;
-import py.edu.facitec.ventas.repository.VendedorRepository;
-import py.edu.facitec.ventas.repository.VentaRepository;
-import py.edu.facitec.ventas.repository.VentaDetalleRepository;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import py.edu.facitec.ventas.repository.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 @Slf4j
 public class VentasService {
+
     @Autowired
     ClienteRepository clienteRepository;
 
@@ -33,69 +30,115 @@ public class VentasService {
 
     @Autowired
     VentaDetalleRepository ventaDetalleRepository;
+
     public List<Venta> findAllVentas() {
         return ventaRepository.findAll();
     }
+
     public Venta findOneVenta(int id) {
         return ventaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venta con id " + id + " no existe"));
     }
+
     @Transactional
     public Venta saveVenta(InputVenta dto) {
-        if (dto == null || dto.getItems() == null || dto.getItems().isEmpty()) {
-            throw new IllegalArgumentException("La venta debe tener items");
-        }
+        validarVenta(dto);
+
         Cliente cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + dto.getClienteId()));
 
         Vendedor vendedor = vendedorRepository.findById(dto.getVendedorId())
                 .orElseThrow(() -> new RuntimeException("Vendedor no encontrado con ID: " + dto.getVendedorId()));
+
         Venta venta = Venta.builder()
-                .fecha((dto.getFecha()))
+                .fecha(dto.getFecha())
                 .tipoPago(dto.getTipoPago())
                 .cliente(cliente)
                 .vendedor(vendedor)
                 .build();
+
         Venta ventaGuardada = ventaRepository.save(venta);
-        for (InputVentaDetalle detalleDto : dto.getItems()) {
+        procesarItemsVenta(dto.getItems(), ventaGuardada);
+
+        return ventaGuardada;
+    }
+
+    private void validarVenta(InputVenta dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("Los datos de la venta no pueden ser nulos");
+        }
+
+        if (dto.getItems() == null || dto.getItems().isEmpty()) {
+            throw new IllegalArgumentException("La venta debe tener al menos un item");
+        }
+
+        if (dto.getTipoPago() == null ||
+                (!dto.getTipoPago().equals("EFECTIVO") && !dto.getTipoPago().equals("CREDITO"))) {
+            throw new IllegalArgumentException("Tipo de pago debe ser EFECTIVO o CREDITO");
+        }
+        if ("CREDITO".equals(dto.getTipoPago())) {
+            validarLimiteCredito(dto.getClienteId(), dto.getItems());
+        }
+    }
+
+    private void procesarItemsVenta(List<InputVentaDetalle> items, Venta venta) {
+        for (InputVentaDetalle detalleDto : items) {
             Producto producto = productoRepository.findById(detalleDto.getProductoId())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + detalleDto.getProductoId()));
 
-            if (producto.getStock() == null || producto.getStock() < detalleDto.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getDescripcion());
-            }
+            validarStockProducto(producto, detalleDto.getCantidad());
+
+            Double precio = detalleDto.getPrecio() != null ?
+                    detalleDto.getPrecio() : producto.getPrecioVenta();
+
             VentaDetalle detalle = VentaDetalle.builder()
                     .cantidad(detalleDto.getCantidad())
-                    .precio(detalleDto.getPrecio() != null ? detalleDto.getPrecio() : producto.getPrecioVenta())
+                    .precio(precio)
                     .producto(producto)
-                    .venta(ventaGuardada)
+                    .venta(venta)
                     .build();
+
             ventaDetalleRepository.save(detalle);
             producto.setStock(producto.getStock() - detalleDto.getCantidad());
             productoRepository.save(producto);
         }
-
-        return ventaGuardada;
-    }
-    public Flux<Venta> findAllVentaesFlux() {
-        return Flux.fromIterable(ventaRepository.findAll());
     }
 
-    public Mono<Venta> findOneMono(int id) {
-        return Mono.justOrEmpty(ventaRepository.findById(id));
+    private void validarStockProducto(Producto producto, int cantidad) {
+        if (producto.getStock() == null || producto.getStock() < cantidad) {
+            throw new RuntimeException("Stock insuficiente para el producto: " + producto.getDescripcion() +
+                    ". Stock disponible: " + producto.getStock());
+        }
     }
+
+    private void validarLimiteCredito(Integer clienteId, List<InputVentaDetalle> items) {
+        log.info("Validando límite de crédito para cliente ID: {}", clienteId);
+        BigDecimal totalVenta = BigDecimal.ZERO;
+        for (InputVentaDetalle item : items) {
+            Producto producto = productoRepository.findById(item.getProductoId())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            Double precio = item.getPrecio() != null ?
+                    item.getPrecio() : producto.getPrecioVenta();
+
+            totalVenta = totalVenta.add(BigDecimal.valueOf(precio * item.getCantidad()));
+        }
+    }
+
     @Transactional
     public void deleteVenta(int id) {
         Venta venta = ventaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + id));
-        List<VentaDetalle> detalles = ventaDetalleRepository.findByVentaId(id);
-        for (VentaDetalle detalle : detalles) {
+        for (VentaDetalle detalle : venta.getItems()) {
             Producto producto = detalle.getProducto();
             producto.setStock(producto.getStock() + detalle.getCantidad());
             productoRepository.save(producto);
         }
+
         ventaRepository.delete(venta);
     }
+
+
     @Transactional
     public Venta updateVenta(int id, InputVenta dto) {
         deleteVenta(id);

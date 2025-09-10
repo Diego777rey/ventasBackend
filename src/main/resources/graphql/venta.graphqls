@@ -1,28 +1,30 @@
-
-type Venta {
-    id: ID
-    fecha: String
-    tipoPago: String
-    cliente: Cliente
-    vendedor: Vendedor
-    items: [VentaDetalle]
-}
-
-type VentaDetalle {
-    id: ID
-    cantidad: Int
-    precio: Float
-    producto: Producto
-}
-input InputVentaDetalle {
-    cantidad: Int!
-    precio: Float!
-    productoId: ID!
-}
-input InputVenta {
+input VentaInput {
     fecha: String!
     tipoPago: String!
     clienteId: ID!
     vendedorId: ID!
-    items: [InputVentaDetalle!]!
+    items: [ItemVentaInput!]!
+}
+
+input ItemVentaInput {
+    productoId: ID!
+    cantidad: Int!
+    precio: Float
+}
+
+type Venta {
+    id: ID!
+    fecha: String!
+    tipoPago: String!
+    cliente: Cliente!
+    vendedor: Vendedor!
+    items: [VentaDetalle!]!
+}
+
+type VentaDetalle {
+    id: ID!
+    cantidad: Int!
+    precio: Float!
+    producto: Producto!
+    subtotal: Float!
 }
