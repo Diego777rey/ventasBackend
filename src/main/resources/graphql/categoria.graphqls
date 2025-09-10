@@ -1,0 +1,7 @@
+type Categoria {
+    id: ID
+    descripcion: String
+}
+input InputCategoria {
+    descripcion: String!
+}

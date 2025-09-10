@@ -1,0 +1,28 @@
+
+type Venta {
+    id: ID
+    fecha: String
+    tipoPago: String
+    cliente: Cliente
+    vendedor: Vendedor
+    items: [VentaDetalle]
+}
+
+type VentaDetalle {
+    id: ID
+    cantidad: Int
+    precio: Float
+    producto: Producto
+}
+input InputVentaDetalle {
+    cantidad: Int!
+    precio: Float!
+    productoId: ID!
+}
+input InputVenta {
+    fecha: String!
+    tipoPago: String!
+    clienteId: ID!
+    vendedorId: ID!
+    items: [InputVentaDetalle!]!
+}

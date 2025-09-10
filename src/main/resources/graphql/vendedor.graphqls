@@ -1,0 +1,19 @@
+type Vendedor implements Persona {
+    id: ID
+    nombre: String
+    apellido: String
+    documento: String
+    telefono: String
+    email: String
+    activo: Boolean
+    fechaNacimiento: String
+}
+input InputVendedor {
+    nombre: String!
+    apellido: String!
+    documento: String!
+    telefono: String!
+    email: String!
+    activo: Boolean!
+    fechaNacimiento: String!
+}

@@ -1,0 +1,17 @@
+type Producto {
+    id: ID
+    descripcion: String
+    precioCompra: Float
+    precioVenta: Float
+    stock: Int
+    activo: Boolean
+    categoria: Categoria
+}
+input InputProducto {
+    descripcion: String!
+    precioCompra: Float
+    precioVenta: Float
+    stock: Int
+    activo: Boolean
+    categoriaId: Int!
+}

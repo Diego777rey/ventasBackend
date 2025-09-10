@@ -1,0 +1,27 @@
+type Query {
+    findVendedorById(VendedorId: ID!): Vendedor
+    findAllVendedores: [Vendedor]
+    findOneVendedor(id: ID!): Vendedor
+    findClienteById(ClienteId: ID!): Cliente
+    findAllClientes: [Cliente]
+    findOneCliente(id: ID!): Cliente
+    findCategoriaById(categoriaId: ID!): Categoria
+    findAllCategorias: [Categoria]
+    findUsuarioById(id: ID!): Usuario
+    findAllUsuarios: [Usuario]
+    findProductoById(productoId: ID!): Producto
+    findAllProductos: [Producto]
+    findVentaById(VentaId: ID!): Venta
+    findAllVentas: [Venta]
+    findOneVenta(id: ID!): Venta
+}
+type Subscription {
+    findAllVendedoresFlux: [Vendedor]
+    findOneVendedorMono(id: ID!): Vendedor
+
+    findAllClientesFlux: [Cliente]
+    findOneClienteMono(id: ID!): Cliente
+
+    findAllVentasFlux: [Venta]
+    findOneVentaMono(id: ID!): Venta
+}

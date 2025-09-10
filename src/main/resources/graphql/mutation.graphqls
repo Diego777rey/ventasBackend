@@ -1,0 +1,35 @@
+type Mutation {
+    createVendedor(inputVendedor: InputVendedor!): Vendedor
+    updateVendedor(id: ID!, inputVendedor: InputVendedor!): Vendedor
+    deleteVendedor(id: ID!): Vendedor
+    deleteVendedorById(VendedorId: ID!): String
+    saveVendedor(dto: InputVendedor!): Vendedor
+    updateVendedorWithId(id: ID!, dto: InputVendedor!): Vendedor
+    createCliente(inputCliente: InputCliente!): Cliente
+    updateCliente(id: ID!, inputCliente: InputCliente!): Cliente
+    deleteCliente(id: ID!): Cliente
+
+    deleteClienteById(ClienteId: ID!): String
+    saveCliente(dto: InputCliente!): Cliente
+    updateClienteWithId(id: ID!, dto: InputCliente!): Cliente
+
+    createCategoria(inputCategoria: InputCategoria!): Categoria
+    updateCategoria(id: ID!, inputCategoria: InputCategoria!): Categoria
+    deleteCategoria(id: ID!): Categoria
+
+    createUsuario(inputUsuario: InputUsuario!): Usuario
+    updateUsuario(id: ID!, inputUsuario: InputUsuario!): Usuario
+    deleteUsuario(id: ID!): Usuario
+
+    createProducto(inputProducto: InputProducto!): Producto
+    updateProducto(id: ID!, inputProducto: InputProducto!): Producto
+    deleteProducto(id: ID!): Producto
+
+    createVenta(inputVenta: InputVenta!): Venta
+    updateVenta(id: ID!, inputVenta: InputVenta!): Venta
+    deleteVenta(id: ID!): Venta
+
+    deleteVentaById(VentaId: ID!): String
+    saveVenta(dto: InputVenta!): Venta
+    updateVentaWithId(id: ID!, dto: InputVenta!): Venta
+}

@@ -1,0 +1,20 @@
+type Cliente implements Persona {
+    id: ID
+    nombre: String
+    apellido: String
+    documento: String
+    telefono: String
+    email: String
+    activo: Boolean
+    fechaRegistro: String
+}
+
+input InputCliente {
+    nombre: String!
+    apellido: String!
+    documento: String!
+    telefono: String!
+    email: String!
+    activo: Boolean!
+    fechaRegistro: String!
+}
