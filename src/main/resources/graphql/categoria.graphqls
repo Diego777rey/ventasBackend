@@ -5,3 +5,10 @@ type Categoria {
 input InputCategoria {
     descripcion: String!
 }
+type PaginadorCategoria {
+    items: [Categoria!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}

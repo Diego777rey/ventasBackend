@@ -14,6 +14,7 @@ import java.util.List;
 
 @Controller
 public class VentaController {
+    //ACA HACEMOS LO SIGUIENTE IMPLEMENTAMOS LAS ANOTACIONES QUE VENDRIAN A SER LOS QUERYRESOLVER Y MUTATION RESOLVERS
 
     @Autowired
     VentasService ventasService;
@@ -45,15 +46,13 @@ public class VentaController {
         ventasService.deleteVenta(id);
         return true;
     }
-
+//ACA CREAMOS Y DEFINIMOS SUBCLASES
     private InputVenta convertirVentaInputAInputVenta(VentaInput input) {
         InputVenta inputVenta = new InputVenta();
         inputVenta.setFecha(input.getFecha());
         inputVenta.setTipoPago(input.getTipoPago());
         inputVenta.setClienteId(Integer.parseInt(input.getClienteId()));
         inputVenta.setVendedorId(Integer.parseInt(input.getVendedorId()));
-
-        // Convertir items
         List<InputVentaDetalle> items = input.getItems().stream()
                 .map(itemInput -> {
                     InputVentaDetalle detalle = new InputVentaDetalle();

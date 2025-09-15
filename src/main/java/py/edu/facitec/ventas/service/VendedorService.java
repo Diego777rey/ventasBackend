@@ -3,6 +3,7 @@ package py.edu.facitec.ventas.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import py.edu.facitec.ventas.dto.PaginadorDto;
 import py.edu.facitec.ventas.entity.Vendedor;
 import py.edu.facitec.ventas.repository.VendedorRepository;
 import reactor.core.publisher.Flux;
@@ -14,6 +15,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class VendedorService {
+    @Autowired
+    PaginadorService paginadorService;
     @Autowired
     private VendedorRepository vendedorRepository;
     public List<Vendedor> findAllVendedores() {
@@ -78,6 +81,22 @@ public class VendedorService {
         vendedorRepository.delete(vendedor);
         return vendedor;
     }
+
+    public PaginadorDto<Vendedor> findVendedoresPaginated(int page, int size, String search) {
+        return paginadorService.<Vendedor>paginarConFiltro(
+                (s, pageable) -> {
+                    if (s == null || s.trim().isEmpty()) {
+                        return vendedorRepository.findAll(pageable);
+                    }
+                    return vendedorRepository.findByNombreContainingIgnoreCase(s, pageable);
+                },
+                search,
+                page,
+                size
+        );
+    }
+
+
     private void validarCamposObligatorios(Vendedor dto) {
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre es obligatorio");

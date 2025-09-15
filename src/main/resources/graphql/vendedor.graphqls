@@ -8,6 +8,13 @@ type Vendedor implements Persona {
     activo: Boolean
     fechaNacimiento: String
 }
+type PaginadorVendedor {
+    items: [Vendedor!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}
 input InputVendedor {
     nombre: String!
     apellido: String!

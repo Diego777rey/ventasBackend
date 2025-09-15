@@ -70,7 +70,6 @@ public class UsuarioService {
     public Usuario deleteUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario con id " + id + " no existe"));
-
         usuarioRepository.delete(usuario);
         return usuario;
     }
@@ -83,5 +82,4 @@ public class UsuarioService {
             throw new IllegalArgumentException("La contraseña es obligatoria");
         }
     }
-
 }

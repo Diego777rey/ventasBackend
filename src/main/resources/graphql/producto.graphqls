@@ -7,6 +7,13 @@ type Producto {
     activo: Boolean
     categoria: Categoria
 }
+type PaginadorProducto {
+    items: [Producto!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}
 input InputProducto {
     descripcion: String!
     precioCompra: Float

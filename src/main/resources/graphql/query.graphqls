@@ -11,6 +11,12 @@ type Query {
     findAllUsuarios: [Usuario]
     findProductoById(productoId: ID!): Producto
     findAllProductos: [Producto]
+    findProductosPaginated(page: Int!, size: Int!, search: String): PaginadorProducto
+    findCategoriasPaginated(page: Int!, size: Int!, search: String): PaginadorCategoria
+    findClientesPaginated(page: Int!, size: Int!, search: String): PaginadorCliente
+    findVendedoresPaginated(page: Int!, size: Int!, search: String): PaginadorVendedor
+    findVentasPaginated(page: Int!, size: Int!, search: String): PaginadorVenta
+
     ventas: [Venta!]!
     venta(id: ID!): Venta
 }
@@ -21,6 +27,6 @@ type Subscription {
     findAllClientesFlux: [Cliente]
     findOneClienteMono(id: ID!): Cliente
 
-    findAllVentasFlux: [Venta]
-    findOneVentaMono(id: ID!): Venta
+    findAllCategoriasFlux: [Categoria]
+    findOneCategoriaMono(id: ID!): Categoria
 }

@@ -13,7 +13,7 @@ type Mutation {
     saveCliente(dto: InputCliente!): Cliente
     updateClienteWithId(id: ID!, dto: InputCliente!): Cliente
 
-    createCategoria(inputCategoria: InputCategoria!): Categoria
+    saveCategoria(inputCategoria: InputCategoria!): Categoria
     updateCategoria(id: ID!, inputCategoria: InputCategoria!): Categoria
     deleteCategoria(id: ID!): Categoria
 

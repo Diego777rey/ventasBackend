@@ -6,6 +6,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.stereotype.Controller;
+import py.edu.facitec.ventas.dto.PaginadorDto;
 import py.edu.facitec.ventas.entity.Cliente;
 import py.edu.facitec.ventas.service.ClienteService;
 import reactor.core.publisher.Flux;
@@ -16,53 +17,63 @@ import java.util.List;
 @Controller
 public class ClienteController {
     @Autowired
-    private ClienteService ClienteService;
+    private ClienteService clienteService;
     @QueryMapping
     public List<Cliente> findAllClientes() {
-        return ClienteService.findAllClientes();
+        return clienteService.findAllClientes();
     }
     @QueryMapping
     public Cliente findClienteById(@Argument("ClienteId") int ClienteId) {
-        return ClienteService.findOneCliente(ClienteId);
+        return clienteService.findOneCliente(ClienteId);
     }
     @QueryMapping
     public Cliente findOneCliente(@Argument("id") int id) {
-        return ClienteService.findOneCliente(id);
+        return clienteService.findOneCliente(id);
     }
+    @QueryMapping
+    public PaginadorDto<Cliente> findClientesPaginated(
+            @Argument("page") int page,
+            @Argument("size") int size,
+            @Argument("search") String search
+    ) {
+        return clienteService.findClientesPaginated(page, size, search);
+    }
+
+
     @MutationMapping
     public Cliente createCliente(@Argument("inputCliente") Cliente inputCliente) {
-        return ClienteService.saveCliente(inputCliente);
+        return clienteService.saveCliente(inputCliente);
     }
     @MutationMapping
     public Cliente saveCliente(@Argument("dto") Cliente dto) {
-        return ClienteService.saveCliente(dto);
+        return clienteService.saveCliente(dto);
     }
     @MutationMapping
     public Cliente updateCliente(@Argument("id") int id, @Argument("inputCliente") Cliente inputCliente) {
-        return ClienteService.updateCliente(id, inputCliente);
+        return clienteService.updateCliente(id, inputCliente);
     }
 
     @MutationMapping
     public Cliente updateClienteWithId(@Argument("id") int id, @Argument("dto") Cliente dto) {
-        return ClienteService.updateCliente(id, dto);
+        return clienteService.updateCliente(id, dto);
     }
 
     @MutationMapping
     public Cliente deleteCliente(@Argument("id") int id) {
-        return ClienteService.deleteCliente(id);
+        return clienteService.deleteCliente(id);
     }
 
     @MutationMapping
     public String deleteClienteById(@Argument("ClienteId") int ClienteId) {
-        ClienteService.deleteCliente(ClienteId);
+        clienteService.deleteCliente(ClienteId);
         return "Cliente eliminado exitosamente";
     }
     @SubscriptionMapping
     public Flux<Cliente> findAllClientesFlux() {
-        return ClienteService.findAllClienteesFlux();
+        return clienteService.findAllClienteesFlux();
     }
     @SubscriptionMapping
     public Mono<Cliente> findOneClienteMono(@Argument("id") int id) {
-        return ClienteService.findOneMono(id);
+        return clienteService.findOneMono(id);
     }
 }

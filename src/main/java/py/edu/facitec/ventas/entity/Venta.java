@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -30,6 +29,4 @@ public class Venta {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Vendedor vendedor;
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VentaDetalle> items = new ArrayList<>();
 }

@@ -8,6 +8,13 @@ type Cliente implements Persona {
     activo: Boolean
     fechaRegistro: String
 }
+type PaginadorCliente {
+    items: [Cliente!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}
 
 input InputCliente {
     nombre: String!

@@ -129,10 +129,13 @@ public class VentasService {
     public void deleteVenta(int id) {
         Venta venta = ventaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + id));
-        for (VentaDetalle detalle : venta.getItems()) {
+        List<VentaDetalle> detalles = ventaDetalleRepository.findByVentaId(venta.getId());
+
+        for (VentaDetalle detalle : detalles) {
             Producto producto = detalle.getProducto();
             producto.setStock(producto.getStock() + detalle.getCantidad());
             productoRepository.save(producto);
+            ventaDetalleRepository.delete(detalle); //aca eliminamos el detalle de la venta
         }
 
         ventaRepository.delete(venta);

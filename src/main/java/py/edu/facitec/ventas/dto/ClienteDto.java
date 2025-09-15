@@ -14,3 +14,4 @@ import java.util.Date;
 public class ClienteDto {
     private Date fechaRegistro;
 }
+//los dtos se utilizan como medio de seguridad para no exponer datos sensibles
