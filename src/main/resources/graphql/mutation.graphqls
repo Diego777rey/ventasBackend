@@ -25,7 +25,7 @@ type Mutation {
     updateProducto(id: ID!, inputProducto: InputProducto!): Producto
     deleteProducto(id: ID!): Producto
 
-    crearVenta(input: VentaInput!): Venta!
-    actualizarVenta(id: ID!, input: VentaInput!): Venta!
+    crearVenta(input: InputVenta!): Venta!
+    actualizarVenta(id: ID!, input: InputVenta!): Venta!
     eliminarVenta(id: ID!): Boolean!
 }

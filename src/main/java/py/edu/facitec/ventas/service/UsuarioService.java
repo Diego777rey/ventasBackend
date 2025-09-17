@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import py.edu.facitec.ventas.dto.InputUsuario;
+import py.edu.facitec.ventas.dto.PaginadorDto;
 import py.edu.facitec.ventas.entity.Usuario;
+import py.edu.facitec.ventas.entity.Vendedor;
 import py.edu.facitec.ventas.repository.UsuarioRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,6 +17,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class UsuarioService {
+    @Autowired
+    PaginadorService paginadorService;
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -73,6 +77,22 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
         return usuario;
     }
+    public PaginadorDto<Usuario> findUsuariosPaginated(int page, int size, String search) {
+        return paginadorService.<Usuario>paginarConFiltro(
+                (s, pageable) -> {
+                    if (s == null || s.trim().isEmpty()) {
+                        return usuarioRepository.findAll(pageable);
+                    }
+                    return usuarioRepository.findByNombreContainingIgnoreCase(s, pageable);
+                },
+                search,
+                page,
+                size
+        );
+    }
+
+
+
 
     private void validarCamposObligatorios(InputUsuario dto) {
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {

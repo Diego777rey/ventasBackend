@@ -7,3 +7,10 @@ input InputUsuario {
     nombre: String!
     contrasenha: String!
 }
+type PaginadorUsuario {
+    items: [Usuario!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}

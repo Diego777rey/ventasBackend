@@ -7,26 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import py.edu.facitec.ventas.service.ReporteClienteService;
+import py.edu.facitec.ventas.service.ReporteVendedorService;
 
 @RestController
 @RequiredArgsConstructor
-public class ReporteClienteController {
+public class ReporteVendedorController {
 
-    private final ReporteClienteService reporteClienteService;
+    private final ReporteVendedorService reporteVendedorService;
 
-    @GetMapping("/api/reportes/cliente")
-    public ResponseEntity<byte[]> generarReporteClientes(
+    @GetMapping("/api/reportes/vendedor")
+    public ResponseEntity<byte[]> generarReporteVendedores(
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String fechaInicio,
             @RequestParam(required = false) String fechaFin) {
 
         try {
             // Pasamos los filtros al servicio
-            byte[] pdf = reporteClienteService.generarReporteClientes(nombre, fechaInicio, fechaFin);
+            byte[] pdf = reporteVendedorService.generarReporteVendedores(nombre, fechaInicio, fechaFin);
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=clientes.pdf")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=vendedores.pdf")
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(pdf);
 

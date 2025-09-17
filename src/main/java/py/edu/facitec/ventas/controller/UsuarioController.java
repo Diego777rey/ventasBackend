@@ -6,6 +6,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import py.edu.facitec.ventas.dto.InputUsuario;
+import py.edu.facitec.ventas.dto.PaginadorDto;
+import py.edu.facitec.ventas.entity.Cliente;
 import py.edu.facitec.ventas.entity.Usuario;
 import py.edu.facitec.ventas.service.UsuarioService;
 
@@ -26,6 +28,15 @@ public class UsuarioController {
     @QueryMapping
     public Usuario findUsuarioById(@Argument("id") Long id) {
         return usuarioService.findOneUsuario(id);
+    }
+
+    @QueryMapping
+    public PaginadorDto<Usuario> findUsuariosPaginated(
+            @Argument("page") int page,
+            @Argument("size") int size,
+            @Argument("search") String search
+    ) {
+        return usuarioService.findUsuariosPaginated(page, size, search);
     }
 
     // ==== Mutations ====

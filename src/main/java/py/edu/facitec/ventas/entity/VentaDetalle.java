@@ -10,22 +10,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "venta_detalles")
 @NoArgsConstructor
-@AllArgsConstructor//esto se utliza para que no tengamos que construir los constructores ni los getters y setters
+@AllArgsConstructor
 @Builder
 public class VentaDetalle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(nullable = false)
-    private int cantidad;
-    @Column(nullable = false)
-    private Double precio;
+    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Producto producto;
+    private Integer cantidad;
+    private Float precio;
+    private Float subtotal;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private Venta venta;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Producto producto;
 }

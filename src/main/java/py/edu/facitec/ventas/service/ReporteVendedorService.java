@@ -4,7 +4,9 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Service;
 import py.edu.facitec.ventas.entity.Cliente;
+import py.edu.facitec.ventas.entity.Vendedor;
 import py.edu.facitec.ventas.repository.ClienteRepository;
+import py.edu.facitec.ventas.repository.VendedorRepository;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -12,20 +14,20 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ReporteClienteService {
+public class ReporteVendedorService {
 
-    private final ClienteRepository clienteRepository;
+    private final VendedorRepository vendedorRepository;
 
-    public ReporteClienteService(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
+    public ReporteVendedorService(VendedorRepository vendedorRepository) {
+        this.vendedorRepository = vendedorRepository;
     }
 
-    public byte[] generarReporteClientes(String nombre, String fechaInicio, String fechaFin) throws Exception {
+    public byte[] generarReporteVendedores(String nombre, String fechaInicio, String fechaFin) throws Exception {
         //Obtener datos filtrados de la base
-        List<Cliente> clientes = clienteRepository.findByFiltros(nombre, fechaInicio, fechaFin);
+        List<Vendedor> vendedores = vendedorRepository.findByFiltros(nombre, fechaInicio, fechaFin);
 
         //Crear DataSource para Jasper
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(clientes);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(vendedores);
 
         //Parámetros opcionales del reporte
         Map<String, Object> parametros = new HashMap<>();
@@ -34,7 +36,7 @@ public class ReporteClienteService {
         parametros.put("FECHA_FIN", fechaFin != null ? fechaFin : "-");
 
         //Cargar archivo jrxml
-        InputStream reporteStream = getClass().getResourceAsStream("/reportes/cliente.jrxml");
+        InputStream reporteStream = getClass().getResourceAsStream("/reportes/vendedor.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(reporteStream);
 
         //Llenar el reporte con datos

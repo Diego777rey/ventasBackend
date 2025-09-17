@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class InputVentaDetalle {
     private Integer productoId;
-    private Integer cantidad;
+    private int cantidad;
     private Float precio;
+    private  Float subTotal;
 }

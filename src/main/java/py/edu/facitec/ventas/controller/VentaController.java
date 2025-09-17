@@ -1,106 +1,88 @@
 package py.edu.facitec.ventas.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 import py.edu.facitec.ventas.dto.InputVenta;
-import py.edu.facitec.ventas.dto.InputVentaDetalle;
+import py.edu.facitec.ventas.dto.PaginadorDto;
+import py.edu.facitec.ventas.entity.Cliente;
+import py.edu.facitec.ventas.entity.Vendedor;
 import py.edu.facitec.ventas.entity.Venta;
+import py.edu.facitec.ventas.entity.VentaDetalle;
+import py.edu.facitec.ventas.service.VentaDetalleService;
 import py.edu.facitec.ventas.service.VentasService;
 
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class VentaController {
-    //ACA HACEMOS LO SIGUIENTE IMPLEMENTAMOS LAS ANOTACIONES QUE VENDRIAN A SER LOS QUERYRESOLVER Y MUTATION RESOLVERS
 
-    @Autowired
-    VentasService ventasService;
+    private final VentasService ventasService;
+    private final VentaDetalleService ventaDetalleService;
 
-    @QueryMapping
-    public List<Venta> ventas() {
-        return ventasService.findAllVentas();
-    }
-
-    @QueryMapping
-    public Venta venta(@Argument Integer id) {
-        return ventasService.findOneVenta(id);
+    // ------------------ MUTATIONS ------------------
+    @MutationMapping
+    public Venta crearVenta(@Argument InputVenta input) {
+        return ventasService.crearVenta(input);
     }
 
     @MutationMapping
-    public Venta crearVenta(@Argument VentaInput input) {
-        InputVenta inputVenta = convertirVentaInputAInputVenta(input);
-        return ventasService.saveVenta(inputVenta);
-    }
-
-    @MutationMapping
-    public Venta actualizarVenta(@Argument Integer id, @Argument VentaInput input) {
-        InputVenta inputVenta = convertirVentaInputAInputVenta(input);
-        return ventasService.updateVenta(id, inputVenta);
+    public Venta actualizarVenta(@Argument Integer id, @Argument InputVenta input) {
+        return ventasService.actualizarVenta(id, input);
     }
 
     @MutationMapping
     public Boolean eliminarVenta(@Argument Integer id) {
-        ventasService.deleteVenta(id);
-        return true;
+        return ventasService.eliminarVenta(id);
     }
-//ACA CREAMOS Y DEFINIMOS SUBCLASES
-    private InputVenta convertirVentaInputAInputVenta(VentaInput input) {
-        InputVenta inputVenta = new InputVenta();
-        inputVenta.setFecha(input.getFecha());
-        inputVenta.setTipoPago(input.getTipoPago());
-        inputVenta.setClienteId(Integer.parseInt(input.getClienteId()));
-        inputVenta.setVendedorId(Integer.parseInt(input.getVendedorId()));
-        List<InputVentaDetalle> items = input.getItems().stream()
-                .map(itemInput -> {
-                    InputVentaDetalle detalle = new InputVentaDetalle();
-                    detalle.setProductoId(Integer.parseInt(itemInput.getProductoId()));
-                    detalle.setCantidad(itemInput.getCantidad());
-                    detalle.setPrecio(itemInput.getPrecio());
-                    return detalle;
-                })
-                .collect(java.util.stream.Collectors.toList());
 
-        inputVenta.setItems(items);
-
-        return inputVenta;
+    // ------------------ QUERIES ------------------
+    @QueryMapping
+    public Venta venta(@Argument Integer id) {
+        Venta venta = ventasService.obtenerVenta(id);
+        // Cargar detalles para que items devuelva datos
+        ventaDetalleService.loadDetalles(List.of(venta));
+        return venta;
     }
-}
-class VentaInput {
-    private String fecha;
-    private String tipoPago;
-    private String clienteId;
-    private String vendedorId;
-    private List<ItemVentaInput> items;
 
-    public String getFecha() { return fecha; }
-    public void setFecha(String fecha) { this.fecha = fecha; }
+    @QueryMapping
+    public List<Venta> ventas() {
+        List<Venta> ventas = ventasService.obtenerTodasLasVentas();
+        if (!ventas.isEmpty()) {
+            ventaDetalleService.loadDetalles(ventas);
+        }
+        return ventas;
+    }
 
-    public String getTipoPago() { return tipoPago; }
-    public void setTipoPago(String tipoPago) { this.tipoPago = tipoPago; }
+    @QueryMapping
+    public PaginadorDto<Venta> findVentasPaginated(@Argument String search,
+                                                   @Argument int page,
+                                                   @Argument int size) {
+        PaginadorDto<Venta> paginador = ventasService.obtenerVentasPaginadas(search, page, size);
+        List<Venta> ventas = paginador.getItems();
+        if (!ventas.isEmpty()) {
+            ventaDetalleService.loadDetalles(ventas);
+        }
+        return paginador;
+    }
 
-    public String getClienteId() { return clienteId; }
-    public void setClienteId(String clienteId) { this.clienteId = clienteId; }
+    // ------------------ SCHEMA MAPPINGS ------------------
+    @SchemaMapping(typeName = "Venta", field = "items")
+    public List<VentaDetalle> getItems(Venta venta) {
+        return ventaDetalleService.findByVentaId(venta.getId());
+    }
 
-    public String getVendedorId() { return vendedorId; }
-    public void setVendedorId(String vendedorId) { this.vendedorId = vendedorId; }
+    @SchemaMapping(typeName = "Venta", field = "cliente")
+    public Cliente getCliente(Venta venta) {
+        return venta.getCliente();
+    }
 
-    public List<ItemVentaInput> getItems() { return items; }
-    public void setItems(List<ItemVentaInput> items) { this.items = items; }
-}
-
-class ItemVentaInput {
-    private String productoId;
-    private int cantidad;
-    private Float precio;
-    public String getProductoId() { return productoId; }
-    public void setProductoId(String productoId) { this.productoId = productoId; }
-
-    public int getCantidad() { return cantidad; }
-    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
-
-    public Float getPrecio() { return precio; }
-    public void setPrecio(Float precio) { this.precio = precio; }
+    @SchemaMapping(typeName = "Venta", field = "vendedor")
+    public Vendedor getVendedor(Venta venta) {
+        return venta.getVendedor();
+    }
 }

@@ -6,27 +6,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "ventas")
 @NoArgsConstructor
-@AllArgsConstructor//esto se utliza para que no tengamos que construir los constructores ni los getters y setters
+@AllArgsConstructor
 @Builder
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String fecha;
     private String tipoPago;
 
     @ManyToOne
-    @JoinColumn(nullable = false)//obligatorio
+    @JoinColumn(nullable = false)
     private Cliente cliente;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private Vendedor vendedor;
+
 }

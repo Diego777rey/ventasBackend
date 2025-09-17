@@ -1,15 +1,16 @@
-input VentaInput {
+input InputVenta {
     fecha: String!
     tipoPago: String!
     clienteId: ID!
     vendedorId: ID!
-    items: [ItemVentaInput!]!
+    items: [InputVentaDetalle!]!
 }
 
-input ItemVentaInput {
+input InputVentaDetalle {
     productoId: ID!
     cantidad: Int!
-    precio: Float
+    precio: Float!
+    subtotal: Float!
 }
 
 type Venta {
@@ -21,7 +22,7 @@ type Venta {
     items: [VentaDetalle!]!
 }
 type PaginadorVenta {
-    items: [Producto!]!
+    items: [Venta!]!
     totalItems: Int!
     totalPages: Int!
     currentPage: Int!

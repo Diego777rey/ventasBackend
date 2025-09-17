@@ -17,7 +17,7 @@ public class Persona {
     //@genericgenerator(name="increment", strategy="increment") autoincrem
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)

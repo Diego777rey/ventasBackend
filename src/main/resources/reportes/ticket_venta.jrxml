@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+                                  http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="ticket_venta"
+              pageWidth="200"
+              pageHeight="1000"
+              columnWidth="200"
+              leftMargin="0"
+              rightMargin="0"
+              topMargin="0"
+              bottomMargin="0">
+
+    <!-- Parámetros -->
+    <parameter name="cliente" class="java.lang.String"/>
+    <parameter name="fecha" class="java.util.Date"/>
+    <parameter name="tipoPago" class="java.lang.String"/>
+    
+    <!-- Campos de detalle -->
+    <field name="producto" class="java.lang.String"/>
+    <field name="cantidad" class="java.lang.Integer"/>
+    <field name="precio" class="java.lang.Double"/>
+    <field name="total" class="java.lang.Double"/>
+    
+    <!-- Fuente de texto pequeña -->
+    <style name="ticketStyle" fontName="Arial" fontSize="8"/>
+
+    <!-- Encabezado -->
+    <title>
+        <band height="60">
+            <staticText>
+                <reportElement x="0" y="0" width="200" height="20"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle" style="ticketStyle"/>
+                <text><![CDATA[MI TIENDA]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="0" y="20" width="200" height="20"/>
+                <textElement textAlignment="Center" style="ticketStyle"/>
+                <textFieldExpression><![CDATA["Cliente: " + $P{cliente}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="40" width="200" height="20"/>
+                <textElement textAlignment="Center" style="ticketStyle"/>
+                <textFieldExpression><![CDATA["Fecha: " + $P{fecha}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- Detalle: productos -->
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="80" y="0" width="40" height="20"/>
+                <textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="120" y="0" width="40" height="20"/>
+                <textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="160" y="0" width="40" height="20"/>
+                <textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- Resumen: totales -->
+    <summary>
+        <band height="60">
+            <textField>
+                <reportElement x="0" y="0" width="200" height="20"/>
+                <textFieldExpression><![CDATA["TOTAL: " + $V{REPORT_COUNT}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="20" width="200" height="20"/>
+                <textFieldExpression><![CDATA["Tipo de Pago: " + $P{tipoPago}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="40" width="200" height="20"/>
+                <textElement textAlignment="Center" style="ticketStyle"/>
+                <text><![CDATA[¡Gracias por su compra!]]></text>
+            </staticText>
+        </band>
+    </summary>
+
+</jasperReport>
