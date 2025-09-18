@@ -10,7 +10,7 @@ type Query {
 
     findUsuarioById(id: ID!): Usuario
     findAllUsuarios: [Usuario]
-    login(nombre: String!, contrasenha: String!): Usuario
+    findUsuarioByEmail(email: String!): Usuario
 
     findProductoById(productoId: ID!): Producto
     findAllProductos: [Producto]

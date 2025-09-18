@@ -18,3 +18,12 @@ type PaginadorUsuario {
     currentPage: Int!
     itemsCount: Int!
 }
+type AuthPayload {
+    token: String!       # JWT
+    usuario: Usuario!      # Información del usuario autenticado
+}
+
+input LoginInput {
+    nombre: String!
+    contrasenha: String!
+}
