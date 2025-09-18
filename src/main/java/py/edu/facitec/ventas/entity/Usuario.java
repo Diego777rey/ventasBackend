@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import py.edu.facitec.ventas.enums.Rol;
 
 @Data
 @Entity
@@ -20,4 +21,9 @@ public class Usuario {
     private String nombre;
     @Column(nullable = false)
     private String contrasenha;
+    @Column(nullable = false)
+    private String email;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Rol rol;
 }

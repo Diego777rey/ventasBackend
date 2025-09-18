@@ -20,6 +20,7 @@ type Mutation {
     createUsuario(inputUsuario: InputUsuario!): Usuario
     updateUsuario(id: ID!, inputUsuario: InputUsuario!): Usuario
     deleteUsuario(id: ID!): Usuario
+    login(nombre: String!, contrasenha: String!): Usuario
 
     createProducto(inputProducto: InputProducto!): Producto
     updateProducto(id: ID!, inputProducto: InputProducto!): Producto

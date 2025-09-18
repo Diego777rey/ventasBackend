@@ -1,11 +1,15 @@
 type Usuario {
     id: ID!
-    nombre: String
-    contrasenha: String
+    nombre: String!
+    contrasenha: String!
+    email: String!
+    rol: String!
 }
 input InputUsuario {
     nombre: String!
     contrasenha: String!
+    email: String!
+    rol: String!
 }
 type PaginadorUsuario {
     items: [Usuario!]!

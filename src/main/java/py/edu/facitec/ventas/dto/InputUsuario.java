@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import py.edu.facitec.ventas.enums.Rol;
 
 @Data
 @NoArgsConstructor
@@ -12,4 +13,6 @@ import lombok.NoArgsConstructor;
 public class InputUsuario {
     private String nombre;
     private String contrasenha;
+    private String email;
+    private Rol rol;
 }

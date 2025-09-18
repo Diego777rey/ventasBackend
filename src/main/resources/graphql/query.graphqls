@@ -7,8 +7,11 @@ type Query {
     findOneCliente(id: ID!): Cliente
     findCategoriaById(categoriaId: ID!): Categoria
     findAllCategorias: [Categoria]
+
     findUsuarioById(id: ID!): Usuario
     findAllUsuarios: [Usuario]
+    login(nombre: String!, contrasenha: String!): Usuario
+
     findProductoById(productoId: ID!): Producto
     findAllProductos: [Producto]
     findProductosPaginated(page: Int!, size: Int!, search: String): PaginadorProducto
