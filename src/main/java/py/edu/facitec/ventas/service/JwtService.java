@@ -16,10 +16,11 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String SECRET = "claveSuperSecretaMuyLargaQueTengaAlMenos32Caracteres!";
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private final String SECRET = "claveSuperSecretaMuyLargaQueTengaAlMenos32Caracteres!";//esta es una cadena que se utiliza como clave secreta para firmar los tokens y debe de tener al menos 32 caracteres
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));//esto hace que se genere una clave secreta a partir de la cadena SECRET usando Keys.hmacShaKeyFor.
     private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 horas
-
+//definimos el tiempo de expiracion del token que en este caso es de 24 hs
+    //este metodo genera un token jwt para el usuario
     public String generateToken(Usuario usuario) {
         return Jwts.builder()
                 .setSubject(usuario.getNombre())

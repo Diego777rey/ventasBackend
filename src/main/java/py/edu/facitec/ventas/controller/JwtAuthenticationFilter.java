@@ -26,6 +26,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        // Permitir solicitudes OPTIONS (preflight de CORS) sin autenticación
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -33,7 +39,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtService.validateToken(token)) {
                 Authentication auth = jwtService.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
+            } else {
+                // Token inválido - enviar respuesta de error
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token inválido o expirado");
+                return;
             }
+        } else {
+            // No hay token - permitir continuar (los endpoints protegidos se manejarán por Spring Security)
         }
 
         filterChain.doFilter(request, response);

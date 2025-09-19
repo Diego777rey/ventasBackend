@@ -63,14 +63,14 @@ public class UsuarioController {
     }
 
     @MutationMapping(name = "updateUsuario")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")//si vamos a poner solo un rol ponemos hasrole si vamos a poner mas ponemos @PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
     public Usuario updateUsuario(@Argument("id") Long id,
                                  @Argument("inputUsuario") InputUsuario inputUsuario) {
         return usuarioService.updateUsuario(id, inputUsuario);
     }
 
     @MutationMapping(name = "deleteUsuario")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")//este es para manejar que solo el usuario administrador pueda realizar esta accion
     public Usuario deleteUsuario(@Argument("id") Long id) {
         return usuarioService.deleteUsuario(id);
     }
