@@ -9,6 +9,10 @@ type Mutation {
     updateCliente(id: ID!, inputCliente: InputCliente!): Cliente
     deleteCliente(id: ID!): Cliente
 
+    createRegistrarHorario(inputRegistrarHorario: InputRegistrarHorario!): RegistrarHorario
+    updateRegistrarHorario(id: ID!, inputRegistrarHorario: InputRegistrarHorario!): RegistrarHorario
+    deleteRegistrarHorario(id: ID!): RegistrarHorario
+
     deleteClienteById(ClienteId: ID!): String
     saveCliente(dto: InputCliente!): Cliente
     updateClienteWithId(id: ID!, dto: InputCliente!): Cliente

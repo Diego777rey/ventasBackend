@@ -8,9 +8,11 @@
 	<title>
 		<band height="50">
 			<staticText>
-				<reportElement x="200" y="10" width="200" height="30" uuid="628d4a62-897f-4812-98ae-91bdde061671"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[$P{titulo}]]></text>
+				<reportElement x="210" y="0" width="173" height="30" uuid="5beec593-e448-41a7-8190-c76712c30e44"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Reporte de vendedores]]></text>
 			</staticText>
 		</band>
 	</title>

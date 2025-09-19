@@ -12,6 +12,10 @@ type Query {
     findAllUsuarios: [Usuario]
     findUsuarioByEmail(email: String!): Usuario
 
+    findRegistrarHorarioById(registrarHorarioId: ID!): RegistrarHorario
+    findAllRegistrarHorarios: [RegistrarHorario]
+    findRegistrarHorariosPorVendedor(vendedorId: ID!): [RegistrarHorario]
+
     findProductoById(productoId: ID!): Producto
     findAllProductos: [Producto]
     findProductosPaginated(page: Int!, size: Int!, search: String): PaginadorProducto
