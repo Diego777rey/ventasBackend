@@ -1,4 +1,4 @@
-package py.edu.facitec.ventas.controller;
+/*package py.edu.facitec.ventas.controller;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,8 +14,6 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtProvider {
@@ -74,4 +72,4 @@ public class JwtProvider {
                 Collections.singletonList(authority)
         );
     }
-}
+}*/

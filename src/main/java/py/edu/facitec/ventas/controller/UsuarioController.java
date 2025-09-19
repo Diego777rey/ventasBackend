@@ -11,6 +11,7 @@ import py.edu.facitec.ventas.dto.InputUsuario;
 import py.edu.facitec.ventas.dto.LoginInput;
 import py.edu.facitec.ventas.dto.PaginadorDto;
 import py.edu.facitec.ventas.entity.Usuario;
+import py.edu.facitec.ventas.service.JwtService;
 import py.edu.facitec.ventas.service.UsuarioService;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
-    private JwtProvider jwtProvider;
+    private JwtService jwtService;
 
     // ==== Queries ====
 
@@ -57,7 +58,6 @@ public class UsuarioController {
     // ==== Mutations ====
 
     @MutationMapping(name = "createUsuario")
-    //@PreAuthorize("hasRole('ADMIN')")
     public Usuario createUsuario(@Argument("inputUsuario") InputUsuario inputUsuario) {
         return usuarioService.saveUsuario(inputUsuario);
     }
@@ -80,8 +80,7 @@ public class UsuarioController {
     @MutationMapping
     public AuthPayload login(@Argument("input") LoginInput input) {
         return usuarioService.login(input.getNombre(), input.getContrasenha())
-                .map(usuario -> new AuthPayload(usuario, jwtProvider.generateToken(usuario), null))
+                .map(usuario -> new AuthPayload(usuario, jwtService.generateToken(usuario), null))
                 .orElseGet(() -> new AuthPayload(null, null, "Nombre de usuario o contraseña incorrectos"));
     }
-
 }

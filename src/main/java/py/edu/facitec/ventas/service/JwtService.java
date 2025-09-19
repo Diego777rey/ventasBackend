@@ -6,63 +6,64 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import py.edu.facitec.ventas.entity.Usuario;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Clave secreta
-    private final long expiration = 1000 * 60 * 60 * 2; // 2 horas
+    private final String SECRET = "claveSuperSecretaMuyLargaQueTengaAlMenos32Caracteres!";
+    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 horas
 
-    // Generar token
-    public String generateToken(String username, String rol) {
+    public String generateToken(Usuario usuario) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("rol", rol) // ej: "ADMIN"
-                .setIssuedAt(new java.util.Date())
-                .setExpiration(new java.util.Date(System.currentTimeMillis() + expiration))
-                .signWith(key)
+                .setSubject(usuario.getNombre())
+                .claim("id", usuario.getId())
+                .claim("rol", usuario.getRol().name())
+                .claim("email", usuario.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Validar token
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            getClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    // Obtener usuario del token
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
     public String getUsernameFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return getClaims(token).getSubject();
     }
 
-    // Obtener rol del token
     public String getRoleFromToken(String token) {
-        return (String) Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("rol");
+        return getClaims(token).get("rol", String.class);
     }
 
-    // ⚡ Nuevo: obtener Authentication con rol para Spring Security
     public Authentication getAuthentication(String token) {
-        String username = getUsernameFromToken(token);
-        String rol = getRoleFromToken(token);
-
-        // Agregar prefijo ROLE_ para que Spring Security lo reconozca
+        Claims claims = getClaims(token);
+        String rol = claims.get("rol", String.class);
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + rol);
 
         return new UsernamePasswordAuthenticationToken(
-                username,
+                claims.getSubject(),
                 null,
                 Collections.singletonList(authority)
         );

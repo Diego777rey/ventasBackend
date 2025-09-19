@@ -27,15 +27,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
-        String token = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
+            String token = authHeader.substring(7);
             if (jwtService.validateToken(token)) {
-
-                // ⚡ Aquí obtenemos la autenticación completa con roles
                 Authentication auth = jwtService.getAuthentication(token);
-
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
