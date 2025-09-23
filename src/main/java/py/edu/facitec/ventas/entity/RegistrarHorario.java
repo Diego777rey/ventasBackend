@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import py.edu.facitec.ventas.enums.Horarios;
 
 import java.time.LocalDateTime;
@@ -29,6 +31,7 @@ public class RegistrarHorario {
     private Horarios horarios;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendedor_id", nullable = false)
+    @JoinColumn(name = "vendedor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_registro_vendedor"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Vendedor vendedor;
 }

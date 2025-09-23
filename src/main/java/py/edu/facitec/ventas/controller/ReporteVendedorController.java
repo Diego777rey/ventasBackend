@@ -1,4 +1,4 @@
-package py.edu.facitec.ventas.controller;
+/*package py.edu.facitec.ventas.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -38,4 +38,4 @@ public class ReporteVendedorController {
             return ResponseEntity.internalServerError().build();
         }
     }
-}
+}*/

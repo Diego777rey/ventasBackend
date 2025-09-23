@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VendedorRepository extends JpaRepository<Vendedor,Integer> {
-   Optional<Vendedor> findByNombre(String nombre);
+    Optional<Vendedor> findByNombre(String nombre);
     Page<Vendedor> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
     @Query("SELECT c FROM Vendedor c " +
             "WHERE (:nombre IS NULL OR c.nombre LIKE %:nombre%) " +//aca realizamos una consulta y filtramos por nombre

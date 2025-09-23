@@ -27,7 +27,7 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // --- CRUD ---
+    //creamos una lista para retornar todos los usuarios
 
     public List<Usuario> findAllUsuarios() {
         return usuarioRepository.findAll();

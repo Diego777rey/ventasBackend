@@ -13,12 +13,11 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<Cliente,Integer> {
     Optional<Cliente> findByNombre(String nombre);
     Page<Cliente> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
-        @Query("SELECT c FROM Cliente c " +
-                "WHERE (:nombre IS NULL OR c.nombre LIKE %:nombre%) " +//aca realizamos una consulta y filtramos por nombre
-                "AND (:fechaInicio IS NULL OR c.fechaRegistro >= :fechaInicio) " +
-                "AND (:fechaFin IS NULL OR c.fechaRegistro <= :fechaFin)")
-        List<Cliente> findByFiltros(String nombre, String fechaInicio, String fechaFin);
-    }
-
+    @Query("SELECT c FROM Cliente c " +
+            "WHERE (:nombre IS NULL OR c.nombre LIKE %:nombre%) " +//aca realizamos una consulta y filtramos por nombre
+            "AND (:fechaInicio IS NULL OR c.fechaRegistro >= :fechaInicio) " +
+            "AND (:fechaFin IS NULL OR c.fechaRegistro <= :fechaFin)")
+    List<Cliente> findByFiltros(String nombre, String fechaInicio, String fechaFin);
+}
 
 

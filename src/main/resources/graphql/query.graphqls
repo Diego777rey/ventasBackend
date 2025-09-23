@@ -5,6 +5,7 @@ type Query {
     findClienteById(ClienteId: ID!): Cliente
     findAllClientes: [Cliente]
     findOneCliente(id: ID!): Cliente
+
     findCategoriaById(categoriaId: ID!): Categoria
     findAllCategorias: [Categoria]
 
@@ -20,10 +21,11 @@ type Query {
     findAllProductos: [Producto]
     findProductosPaginated(page: Int!, size: Int!, search: String): PaginadorProducto
     findCategoriasPaginated(page: Int!, size: Int!, search: String): PaginadorCategoria
-    findClientesPaginated(page: Int!, size: Int!, search: String): PaginadorCliente
     findUsuariosPaginated(page: Int!, size: Int!, search: String): PaginadorUsuario
-    findVendedoresPaginated(page: Int!, size: Int!, search: String): PaginadorVendedor
     findVentasPaginated(page: Int!, size: Int!, search: String): PaginadorVenta
+    findVendedoresPaginated(page: Int!, size: Int!, search: String): PaginadorVendedor
+    findClientesPaginated(page: Int!, size: Int!, search: String): PaginadorCliente
+
 
     ventas: [Venta!]!
     venta(id: ID!): Venta

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import py.edu.facitec.ventas.enums.TipoPago;
 
 @Data
 @Entity
@@ -18,7 +19,7 @@ public class Venta {
     private Integer id;
 
     private String fecha;
-    private String tipoPago;
+    private TipoPago tipoPago;
 
     @ManyToOne
     @JoinColumn(nullable = false)

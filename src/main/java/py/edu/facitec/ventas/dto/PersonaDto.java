@@ -3,6 +3,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import py.edu.facitec.ventas.enums.RolPersona;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -16,4 +19,5 @@ public class PersonaDto {
     private String telefono;
     private String email;
     private Boolean activo;
+    private Set<RolPersona> roles;
 }
